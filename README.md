@@ -1,2 +1,2 @@
 # ARchess
-An Augmented reality application in python
+An augmented reality (AR) application in python
