@@ -21,4 +21,6 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 - Pawn can only promote into Queen. No undo could be done.
 
 # Samples
-![][./samples/sample1.png]
+![][sample1]
+
+[sample1]:https://github.com/zuoym15/ARchess/blob/master/samples/sample1.png
