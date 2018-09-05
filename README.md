@@ -12,5 +12,6 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 - Clone this repository by running `git clone https://github.com/zuoym15/ARchess.git`
 
 # How to play?
-- Run `python caliberate camera.py`. It will pop up a window. What you need to do is to move the 8x8 checkerboard in front of the camera until 30 frames is colleced. Make the variation of view angle & distance as large as possible. Camera intrinsic parameters will be computed and stored in camera parameters.json.
+- Run `python caliberate camera.py`. It will pop up a window. What you need to do is to move the 8x8 checkerboard in front of the camera until 30 frames is colleced. Make the variation of view angle & distance as large as possible. Camera intrinsic parameters will be computed and stored in `camera_parameters.json`.
+- Run `python ARchess.py --camera-id 0`. Make sure the checkerboard is presented in the captured image and there is no occlusion. Play by clicking on the pieces. Grid your mouse placed on is shown in GREEN. Piece you select is shown in RED. Possible moves is shown in BLUE. your king becomes PINK if you are checked.  
 
