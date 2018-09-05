@@ -22,5 +22,10 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 
 # Samples
 ![][sample1]
+![][sample2]
+![][sample3]
 
 [sample1]:https://github.com/zuoym15/ARchess/blob/master/samples/sample1.png
+[sample2]:https://github.com/zuoym15/ARchess/blob/master/samples/sample2.png
+[sample3]:https://github.com/zuoym15/ARchess/blob/master/samples/sample3.png
+
