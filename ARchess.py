@@ -117,21 +117,12 @@ def affine_transform(img, texture, corners):#transform a 2d image to the plane z
 
     return img
 
-def draw_2d_board(board, textures):#draw a 2d board with 2d pieces
-    img = np.zeros((8*60, 8*60, 3), dtype = np.uint8)
+def draw_2d_piece(img, board, textures):#draw 2d piece on a board
     current_state = board.__str__().split('\n')
-
     M = cv2.getRotationMatrix2D((30, 30),180,1)
-    
-
     for i in range(8):
         pieces = current_state[i].split(' ')
         for j in range(8):
-            if (i + j)%2 == 1:
-                img[i*60:(i+1)*60, j*60:(j+1)*60] = np.array([24,141,158])
-            else:
-                img[i*60:(i+1)*60, j*60:(j+1)*60] = np.array([132,223,236])
-
             piece = pieces[j]              
             if piece != '.':
                 texture = textures[piece]
@@ -142,8 +133,20 @@ def draw_2d_board(board, textures):#draw a 2d board with 2d pieces
                 transparent_texture[texture[:,:,3] != 0] = texture[:,:,0:3][texture[:,:,3] != 0]
                 img[i*60:(i+1)*60, j*60:(j+1)*60] = transparent_texture
 
-    #cv2.imshow('img', img)
-    #cv2.waitKey(0)
+    return img
+
+def draw_3d_piece():
+    pass
+
+def draw_2d_board():#draw a 2d board with 2d pieces
+    img = np.zeros((8*60, 8*60, 3), dtype = np.uint8)
+
+    for i in range(8):
+        for j in range(8):
+            if (i + j)%2 == 1:
+                img[i*60:(i+1)*60, j*60:(j+1)*60] = np.array([24,141,158])
+            else:
+                img[i*60:(i+1)*60, j*60:(j+1)*60] = np.array([132,223,236])
 
     return img
 
@@ -171,7 +174,8 @@ def darw_3d_board(img, board, rvec, tvec, A, corners, textures, mode = '2d', fil
                     cv2.putText(img = img, text = piece, org = text_place, fontFace = fontFace, fontScale = 2, color = (255, 0, 255))  
 
     if mode == '2d':                    
-        d2_board = draw_2d_board(board, textures)
+        d2_board = draw_2d_board()
+        d2_board = draw_2d_piece(d2_board, board, textures)
 
         if fill_grid_img is not None and len(fill_grid_img[:,:,3]!=0) != 0:
             mask = fill_grid_img[:,:,3]!=0
@@ -180,7 +184,12 @@ def darw_3d_board(img, board, rvec, tvec, A, corners, textures, mode = '2d', fil
         img = affine_transform(img, d2_board, corners)
 
     if mode == '3d':
-        pass
+        d2_board = draw_2d_board()
+        if fill_grid_img is not None and len(fill_grid_img[:,:,3]!=0) != 0:
+            mask = fill_grid_img[:,:,3]!=0
+            d2_board[mask] = d2_board[mask]//3*2 + fill_grid_img[:,:,0:3][mask]//3
+        img = affine_transform(img, d2_board, corners)
+        draw_3d_board() #TODO: finish this
 
     return img
 
@@ -228,7 +237,7 @@ def get_extrinsic_parameters(img, num_x, num_y, A):#caliberate camera
  
     objp = np.zeros((num_x*num_y,3), np.float32)
     objp[:,:2] = np.mgrid[0:num_x,0:num_y].T.reshape(-1,2)
-    
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     ret, corners = cv2.findChessboardCorners(gray, (num_x, num_y), None)
 
@@ -454,11 +463,13 @@ def main(args):
                 img = darw_3d_board(img, board, rvecs, tvecs, A, contours_corners, textures, piece_type, filled_grid_img)
 
                 cv2.imshow('img', img)
-                cv2.waitKey(1)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
                 
             else:
                 cv2.imshow('img', img)
-                cv2.waitKey(1)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
                 
 
 if __name__ == "__main__":
