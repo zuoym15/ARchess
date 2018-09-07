@@ -2,11 +2,11 @@ import numpy as np
 import cv2
 import glob
 
-from ARchess import frame_reader
+from ARchess import FrameReader
 
 import json
 
-reader = frame_reader()
+reader = FrameReader()
 
 # Define the chess board rows and columns
 rows = 7
@@ -25,12 +25,11 @@ imgPointsArray = []
 
 valid_frame = 0
 
-
 # Loop over the image files
-#for path in glob.glob('../data/left[0-1][0-9].jpg'):
+# for path in glob.glob('../data/left[0-1][0-9].jpg'):
 while True:
     # Load the image and convert it to gray scale
-    #img = cv2.imread(path)
+    # img = cv2.imread(path)
     ret, img = reader.read()
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -42,7 +41,7 @@ while True:
     if ret:
         # Refine the corner position
         corners = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
-        
+
         # Add the object points and the image points to the arrays
         objectPointsArray.append(objectPoints)
         imgPointsArray.append(corners)
@@ -50,14 +49,14 @@ while True:
         # Draw the corners on the image
         cv2.drawChessboardCorners(img, (rows, cols), corners, ret)
 
-        piece = 'Valid Frame: ' + str(valid_frame+1) + '/30'
+        piece = 'Valid Frame: ' + str(valid_frame + 1) + '/30'
 
-        #cv2.putText(img = img, text = piece, org = (gray.shape[0], gray.shape[1]), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 5, color = (255, 0, 0)) 
+        # cv2.putText(img = img, text = piece, org = (gray.shape[0], gray.shape[1]), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 5, color = (255, 0, 0))
 
-        print(piece) 
+        print(piece)
 
         valid_frame += 1
-    
+
     # Display the image
     cv2.imshow('chess board', img)
     cv2.waitKey(1000)
@@ -68,7 +67,7 @@ while True:
 # Calibrate the camera and save the results
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objectPointsArray, imgPointsArray, gray.shape[::-1], None, None)
 print(mtx)
-#np.savez('../data/calib.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
+# np.savez('../data/calib.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
 
 # Print the camera calibration error
 error = 0
