@@ -121,6 +121,14 @@ def draw_3d_board(img, board, rvec, tvec, A, corners, mode='2d',
 
         img = affine_transform(img, d2_board, corners)
 
+    if mode == '3d':
+        d2_board = draw_2d_board()
+        if fill_grid_img is not None and len(fill_grid_img[:, :, 3] != 0) != 0:
+            mask = fill_grid_img[:, :, 3] != 0
+            d2_board[mask] = d2_board[mask] // 3 * 2 + fill_grid_img[:, :, 0:3][mask] // 3
+
+        img = affine_transform(img, d2_board, corners)
+
     return img
 
 
@@ -141,14 +149,17 @@ def project_to_3d(u, v, z, rvec, tvec, A):  # get the 3-d coordinate of a point 
 last_starting = np.array([0, 0])  # store the last starting point of the chessboard.
 
 
-def corners_reorder(img, corners, num_x,
-                    num_y):  # reorder corners detected by get_extrinsic_parameters() so that the order is consistent among frames
+def corners_reorder(img, corners, num_x, num_y):  # reorder corners detected by get_extrinsic_parameters() so that the order is consistent among frames
     global last_starting
+
+    mask = np.zeros_like(img, dtype = np.uint8)
+    cv2.fillConvexPoly(mask, np.int32(corners[[0, 6, 48, 42],:]), (255, ))
+    avg_color = np.average(img[mask!=0]) #take the average color of chessborad as threshold
 
     sample1 = (corners[0] + corners[8]) / 2
     sample2 = (corners[48] + corners[40]) / 2
 
-    if img[int(sample1[1]), int(sample1[0])] > 128 and img[int(sample2[1]), int(sample2[0])] > 128:  # white
+    if img[int(sample1[1]), int(sample1[0])] > avg_color and img[int(sample2[1]), int(sample2[0])] > avg_color:  # white
         corners = np.reshape(corners, (num_x, num_y, 2))
         for x in range(num_x):
             corners[x, :, :] = corners[x, ::-1, :]
