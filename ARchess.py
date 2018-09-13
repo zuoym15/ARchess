@@ -147,8 +147,8 @@ def main(args):
 
             image.set_image(img)
             image.render()
-            # if args.d3_piece:
-            draw_3d_piece(board, rvecs, tvecs, A)
+            if args.d3_piece:
+                draw_3d_piece(board, rvecs, tvecs, A)
         finally:
             glfw.swap_buffers(window)
             glfw.poll_events()
@@ -179,7 +179,6 @@ if __name__ == "__main__":
 
     glClearColor(0, 0, 0, 1)
 
-    # if args.d3_piece:
     load_models()
 
     main(parser.parse_args())
