@@ -1,10 +1,9 @@
-import numpy as np
-import cv2
-import glob
-
-from ARchess import FrameReader
-
 import json
+
+import cv2
+import numpy as np
+
+from frame_reader import FrameReader
 
 reader = FrameReader()
 
@@ -13,7 +12,7 @@ rows = 7
 cols = 7
 
 # Set the termination criteria for the corner sub-pixel algorithm
-criteria = (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 30, 0.001)
+criteria = cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 30, 0.001
 
 # Prepare the object points: (0,0,0), (1,0,0), (2,0,0), ..., (6,5,0). They are the same for all images
 objectPoints = np.zeros((rows * cols, 3), np.float32)
@@ -25,12 +24,9 @@ imgPointsArray = []
 
 valid_frame = 0
 
-# Loop over the image files
-# for path in glob.glob('../data/left[0-1][0-9].jpg'):
 while True:
     # Load the image and convert it to gray scale
-    # img = cv2.imread(path)
-    ret, img = reader.read()
+    img = reader.read()
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -51,8 +47,6 @@ while True:
 
         piece = 'Valid Frame: ' + str(valid_frame + 1) + '/30'
 
-        # cv2.putText(img = img, text = piece, org = (gray.shape[0], gray.shape[1]), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 5, color = (255, 0, 0))
-
         print(piece)
 
         valid_frame += 1
@@ -67,7 +61,6 @@ while True:
 # Calibrate the camera and save the results
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objectPointsArray, imgPointsArray, gray.shape[::-1], None, None)
 print(mtx)
-# np.savez('../data/calib.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
 
 # Print the camera calibration error
 error = 0

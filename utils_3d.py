@@ -121,14 +121,6 @@ def draw_3d_board(img, board, rvec, tvec, A, corners, mode='2d',
 
         img = affine_transform(img, d2_board, corners)
 
-    if mode == '3d':
-        d2_board = draw_2d_board()
-        if fill_grid_img is not None and len(fill_grid_img[:, :, 3] != 0) != 0:
-            mask = fill_grid_img[:, :, 3] != 0
-            d2_board[mask] = d2_board[mask] // 3 * 2 + fill_grid_img[:, :, 0:3][mask] // 3
-        img = affine_transform(img, d2_board, corners)
-        draw_3d_piece(board, rvec, tvec, A)  # TODO: finish this
-
     return img
 
 
@@ -185,19 +177,17 @@ def get_extrinsic_parameters(img, num_x, num_y, A):  # caliberate camera
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     ret, corners = cv2.findChessboardCorners(gray, (num_x, num_y), None)
+    if not ret:
+        raise RuntimeError('fail to find chessboard!')
 
-    rvecs = None
-    tvecs = None
-
-    if ret:
-        corners = np.squeeze(corners)
-        corners = corners_reorder(gray, corners, num_x, num_y)
-        ret, rvecs, tvecs = cv2.solvePnP(objp, corners, A, None)
+    corners = np.squeeze(corners)
+    corners = corners_reorder(gray, corners, num_x, num_y)
+    ret, rvecs, tvecs = cv2.solvePnP(objp, corners, A, None)
 
     if not ret:
-        print('fail to get camera extrinsic parameters!')
+        raise RuntimeError('fail to get camera extrinsic parameters!')
 
-    return ret, rvecs, tvecs, corners
+    return rvecs, tvecs, corners
 
 
 def within_boundary(mouse_x, mouse_y, z, rvecs, tvecs,
