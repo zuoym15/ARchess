@@ -23,6 +23,7 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 - No undo could be done.
 
 # Samples
+- video demo: [click here][https://youtu.be/CRzdARkl3PQ]
 ![][sample1]
 ![][sample2]
 ![][sample3]
