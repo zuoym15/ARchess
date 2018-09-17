@@ -24,12 +24,11 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 
 # Samples
 - video demo: [click here](https://youtu.be/CRzdARkl3PQ)
-![][sample1]
-![][sample2]
+- 2d-piece mode
 ![][sample3]
-![][sample_3d_1]
-![][sample_3d_2]
+- 3d-piece mode
 ![][sample_3d_3]
+- overall setting
 
 [sample1]:https://github.com/zuoym15/ARchess/blob/master/samples/sample1.png
 [sample2]:https://github.com/zuoym15/ARchess/blob/master/samples/sample2.png
