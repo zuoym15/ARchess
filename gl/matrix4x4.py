@@ -14,6 +14,12 @@ def scale(v):
 
     return m
 
+def flip():
+    m = np.eye(4, dtype=np.float32)
+    m[1,1] = -1
+
+    return m
+
 
 def rodrigues(r):
     r = np.array(r, dtype=np.float32)

@@ -74,19 +74,6 @@ def main(args):
 
     while not glfw.window_should_close(window):
         try:
-            img = reader.read()
-
-            rvecs, tvecs, corners = utils_3d.get_extrinsic_parameters(img, 7, 7, A)
-
-            contours = np.zeros((9 * 9, 3), np.float32)
-            contours[:, :2] = np.mgrid[0:9, 0:9].T.reshape(-1, 2) - 1
-
-            contours_corners, _ = cv2.projectPoints(contours, rvecs, tvecs, A, None)
-            contours_corners = contours_corners.squeeze()
-
-            contours_corners_2d = (contours[:, 0:2] + 1) * 60
-            filled_grid_img = np.zeros((8 * 60, 8 * 60, 4), dtype=np.float32)
-
             if is_game_over:
                 result_img_folder = './resources/results/'
                 if game_result == '1-0':
@@ -95,7 +82,22 @@ def main(args):
                     img = cv2.imread(result_img_folder + 'black_won.jpg')
                 else:
                     img = cv2.imread(result_img_folder + 'tie.jpg')
+
             else:
+
+                img = reader.read()
+
+                rvecs, tvecs, corners = utils_3d.get_extrinsic_parameters(img, 7, 7, A)
+
+                contours = np.zeros((9 * 9, 3), np.float32)
+                contours[:, :2] = np.mgrid[0:9, 0:9].T.reshape(-1, 2) - 1
+
+                contours_corners, _ = cv2.projectPoints(contours, rvecs, tvecs, A, None)
+                contours_corners = contours_corners.squeeze()
+
+                contours_corners_2d = (contours[:, 0:2] + 1) * 60
+                filled_grid_img = np.zeros((8 * 60, 8 * 60, 4), dtype=np.float32)
+
                 if selection_flag:
                     filled_grid_img = utils_3d.fill_grid(filled_grid_img, selected_x, selected_y,
                                                          contours_corners_2d,
@@ -147,7 +149,7 @@ def main(args):
 
             image.set_image(img)
             image.render()
-            if args.d3_piece:
+            if args.d3_piece and not is_game_over:
                 draw_3d_piece(board, rvecs, tvecs, A)
         finally:
             glfw.swap_buffers(window)
