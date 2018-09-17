@@ -16,8 +16,8 @@ def load_models():
 
 
 def draw_3d_piece(board, rvec, tvec, A):
-    camera_view = translate(tvec) @ rodrigues(rvec)
-
+    camera_view = scales([0.5, 0.5, 0.5]) @ translate(tvec) @ rodrigues(rvec)
+    
     focal = A[0, 0], A[1, 1]
     principal = A[0, 2], A[1, 2]
     camera_perspective = intrinsics_to_perspective(focal,
