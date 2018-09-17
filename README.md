@@ -25,9 +25,9 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 # Samples
 - video demo: [click here](https://youtu.be/CRzdARkl3PQ)
 - 2d-piece mode
-![](./samples/sample3.png =250x)
+<img src="./samples/sample3.png" alt="sample_2d" width="200"/>
 - 3d-piece mode
-![](./samples/sample_3d_3.png =250x)
+<img src="./samples/sample_3d_3.png" alt="sample_3d" width="200"/>
 - overall setting
 
 [sample1]:https://github.com/zuoym15/ARchess/blob/master/samples/sample1.png
