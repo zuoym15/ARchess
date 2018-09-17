@@ -19,6 +19,7 @@ This is an augmented reality (AR) application in python. Basic chess rules are s
 - Play by clicking on the pieces. Grid your mouse placed on is shown in `GREEN`. Piece you select is shown in `RED`. Possible moves is shown in `BLUE`. your king becomes `PINK` if you are checked.
 
 # Notes
+- No AI availible yet. We will consider adding an AI in the future.
 - Pawn can only promote into Queen. 
 - No undo could be done.
 
